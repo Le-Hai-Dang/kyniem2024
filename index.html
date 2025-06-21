@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kỷ niệm của chúng mình</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #ff6b81;
+      --secondary-color: #f8bbd0;
+      --text-color: #333;
+      --light-color: #fff;
+      --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fce4ec;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.5s ease-in-out;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 10;
+    }
+
+    .intro-slide {
+      text-align: center;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      max-width: 90%;
+    }
+
+    .intro-slide h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .intro-slide p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .date {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 1rem;
+      margin-bottom: 15px;
+      box-shadow: var(--shadow);
+      display: inline-block;
+    }
+
+    .image-container {
+      width: 100%;
+      max-width: 500px;
+      max-height: 60vh;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .content {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+      box-shadow: var(--shadow);
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .content p {
+      font-size: 1.1rem;
+      line-height: 1.4;
+      color: var(--text-color);
+    }
+
+    .btn-next {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-next:hover {
+      background-color: #ff4d67;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-next i {
+      font-size: 0.9rem;
+    }
+
+    .icon-animation {
+      position: absolute;
+      font-size: 3rem;
+      color: var(--primary-color);
+      z-index: 20;
+    }
+
+    .music-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+    }
+
+    .btn-music {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .btn-music.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .btn-music:hover {
+      background-color: #ff4d67;
+      transform: scale(1.1);
+    }
+
+    /* Animation Positions */
+    .icon-heart {
+      top: 10%;
+      right: 10%;
+      animation: heartBeat 1.5s infinite;
+    }
+
+    .icon-laugh {
+      bottom: 15%;
+      right: 10%;
+      animation: bounce 2s infinite;
+    }
+
+    .icon-car {
+      bottom: 10%;
+      left: 10%;
+      animation: slideInRight 2s infinite;
+    }
+
+    .icon-clock {
+      top: 15%;
+      left: 10%;
+      animation: rotateIn 2s infinite;
+    }
+
+    .icon-camera {
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: zoomIn 1.5s infinite;
+    }
+
+    .icon-smile {
+      bottom: 10%;
+      right: 15%;
+      animation: tada 2s infinite;
+    }
+
+    .icon-food {
+      bottom: 15%;
+      left: 15%;
+      animation: wobble 2.5s infinite;
+    }
+
+    .icon-locket {
+      top: 15%;
+      right: 15%;
+      animation: flip 2s infinite;
+    }
+
+    .icon-18plus {
+      bottom: 10%;
+      right: 10%;
+      color: #ff4d67;
+      animation: pulse 1.5s infinite;
+    }
+
+    .icon-hospital {
+      top: 15%;
+      left: 15%;
+      color: #4cb5f5;
+      animation: fadeIn 2s infinite;
+    }
+
+    .icon-cry {
+      bottom: 15%;
+      right: 15%;
+      color: #4cb5f5;
+      animation: shake 2s infinite;
+    }
+
+    .icon-funny {
+      top: 10%;
+      right: 10%;
+      color: #ffc107;
+      animation: swing 2s infinite;
+    }
+
+    .icon-sleep {
+      bottom: 15%;
+      left: 10%;
+      color: #8e44ad;
+      animation: fadeInDown 1.5s infinite;
+    }
+
+    .icon-gift {
+      top: 15%;
+      right: 15%;
+      color: #e74c3c;
+      animation: bounceIn 1.5s infinite;
+    }
+
+    .icon-police {
+      top: 10%;
+      left: 10%;
+      color: #3498db;
+      animation: flash 2s infinite;
+    }
+
+    .icon-sunset {
+      bottom: 15%;
+      right: 15%;
+      color: #f39c12;
+      animation: pulse 2s infinite;
+    }
+
+    .icon-birthday {
+      top: 10%;
+      left: 10%;
+      color: #e74c3c;
+      animation: rubberBand 1.5s infinite;
+    }
+
+    .icon-love {
+      bottom: 15%;
+      right: 10%;
+      color: #e74c3c;
+      animation: heartBeat 1.5s infinite;
+    }
+
+    .icon-rainbow {
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: fadeInRainbow 2s infinite;
+    }
+
+    @keyframes fadeInRainbow {
+      0%, 100% {
+        opacity: 0.7;
+        transform: translateX(-50%) scale(0.9);
+      }
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.1);
+      }
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .intro-slide h1 {
+        font-size: 2rem;
+      }
+
+      .intro-slide p {
+        font-size: 1rem;
+      }
+
+      .date {
+        font-size: 0.9rem;
+      }
+
+      .content p {
+        font-size: 1rem;
+      }
+
+      .btn-next {
+        font-size: 1rem;
+        padding: 10px 20px;
+      }
+
+      .icon-animation {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .intro-slide h1 {
+        font-size: 1.8rem;
+      }
+
+      .image-container {
+        max-height: 50vh;
+      }
+    }
+
+    /* Progress bar */
+    .progress-container {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 6px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 3px;
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 3px;
+      transition: width 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Slides will be generated dynamically by JavaScript -->
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="music-controls">
+    <button class="btn-music" id="btnMusic">
+      <i class="fas fa-play"></i>
+    </button>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="background-music.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Data from note.json
+      const slidesData = [
+        {
+          "trang": 1,
+          "ten_hinh": "",
+          "noi_dung": "Cùng nhìn lại những khoảnh khắc bé Dâu với anh Thơm sau 1 năm quen nhau nè",
+          "hieu_ung": ""
+        },
+        {
+          "trang": 2,
+          "ten_hinh": "h1",
+          "noi_dung": "(13/06/2024) Ngày đầu tiên nhắn với em nè, nhắn xong anh xoá fb hẹn hò lun",
+          "hieu_ung": "Tim"
+        },
+        {
+          "trang": 3,
+          "ten_hinh": "h2",
+          "noi_dung": "Lần đầu mình học cùng nhau đó bé",
+          "hieu_ung": "Mặc cỡ"
+        },
+        {
+          "trang": 4,
+          "ten_hinh": "h3",
+          "noi_dung": "(15/06/2024) Ảnh lần đầu qua đón bé về làng nè",
+          "hieu_ung": "Xe vivu"
+        },
+        {
+          "trang": 5,
+          "ten_hinh": "h4",
+          "noi_dung": "Trên đường đón bé",
+          "hieu_ung": "Đồng hồ"
+        },
+        {
+          "trang": 6,
+          "ten_hinh": "h5",
+          "noi_dung": "(16/06/2024) Lần đầu đi học chụp ảnh bé xem",
+          "hieu_ung": "máy ảnh"
+        },
+        {
+          "trang": 7,
+          "ten_hinh": "h6",
+          "noi_dung": "(18/06/2024) Qua đón bé đi ăn mì Osaka nè, bá ngại quá",
+          "hieu_ung": "Mặt cười"
+        },
+        {
+          "trang": 8,
+          "ten_hinh": "h7",
+          "noi_dung": "Bé dâu kể sở thích ăn uống cho anh thơm nghe nè",
+          "hieu_ung": "Ăn uống"
+        },
+        {
+          "trang": 9,
+          "ten_hinh": "h8",
+          "noi_dung": "(23/6/2024) Bả rủ tui tải Locket",
+          "hieu_ung": "Locket"
+        },
+        {
+          "trang": 10,
+          "ten_hinh": "h9",
+          "noi_dung": "(13/07/2024) Bả qua trọ tui nè",
+          "hieu_ung": "18+"
+        },
+        {
+          "trang": 11,
+          "ten_hinh": "h10",
+          "noi_dung": "(21/08/2021) Bé dâu nhập viện, anh qua chăm dâu tây nè",
+          "hieu_ung": "Bệnh viện"
+        },
+        {
+          "trang": 12,
+          "ten_hinh": "h11",
+          "noi_dung": "Khi cô ấy khóc huhuu",
+          "hieu_ung": "khóc"
+        },
+        {
+          "trang": 13,
+          "ten_hinh": "h12",
+          "noi_dung": "Meme của bé dâu thì siêu nhiều",
+          "hieu_ung": "hài hước"
+        },
+        {
+          "trang": 14,
+          "ten_hinh": "h13",
+          "noi_dung": "Bé ngủ phe phẩy ô hô",
+          "hieu_ung": "ngủ"
+        },
+        {
+          "trang": 15,
+          "ten_hinh": "h14",
+          "noi_dung": "(10/12/2024) Cô ấy được anh Thơm tặng babythree nè",
+          "hieu_ung": "quà tặng"
+        },
+        {
+          "trang": 16,
+          "ten_hinh": "h15",
+          "noi_dung": "Dâu chụp khi vừa khóc xong nè",
+          "hieu_ung": "khóc"
+        },
+        {
+          "trang": 17,
+          "ten_hinh": "h16",
+          "noi_dung": "Dâu ngoan ngoãn (hiếm có) chưa",
+          "hieu_ung": "cười"
+        },
+        {
+          "trang": 18,
+          "ten_hinh": "h17",
+          "noi_dung": "Dâu vi phạm nhaaaaa",
+          "hieu_ung": "cảnh sát"
+        },
+        {
+          "trang": 19,
+          "ten_hinh": "h18",
+          "noi_dung": "Dâu sai khi chơi anh Thơm 5 hiệp",
+          "hieu_ung": "18+"
+        },
+        {
+          "trang": 20,
+          "ten_hinh": "h19",
+          "noi_dung": "Dâu với anh ngắm hoàng hôn nè",
+          "hieu_ung": "Hoàng hôn"
+        },
+        {
+          "trang": 21,
+          "ten_hinh": "h20",
+          "noi_dung": "(11/04/2024) Sinh nhật bé ngoan của anh",
+          "hieu_ung": "Sinh nhật"
+        },
+        {
+          "trang": 22,
+          "ten_hinh": "h21",
+          "noi_dung": "Tụi mình mặc áo cặp nè",
+          "hieu_ung": "Tình yêu"
+        },
+        {
+          "trang": 23,
+          "ten_hinh": "h22",
+          "noi_dung": "(18/04/2024) Anh đi CNEP dâu quậy nè",
+          "hieu_ung": "Khóc"
+        },
+        {
+          "trang": 24,
+          "ten_hinh": "h23",
+          "noi_dung": "(03/05/2024) Sinh nhật anh Thơm được Dâu tặng quà hehehe",
+          "hieu_ung": "quà tặng"
+        },
+        {
+          "trang": 25,
+          "ten_hinh": "h24",
+          "noi_dung": "Chúng mình cùng ngắm cầu vồng nè",
+          "hieu_ung": "cầu vồng"
+        },
+        {
+          "trang": 26,
+          "ten_hinh": "h25",
+          "noi_dung": "Hy vọng chúng ta sẽ mãi hạnh phúc như vậy nhaaaaa",
+          "hieu_ung": "Trái tim rực rỡ"
+        }
+      ];
+
+      const container = document.querySelector('.container');
+      const bgMusic = document.getElementById('bgMusic');
+      const btnMusic = document.getElementById('btnMusic');
+      const progressBar = document.getElementById('progressBar');
+      let currentIndex = 0;
+      let totalSlides = slidesData.length;
+
+      // Map animation types to Font Awesome icons and classes
+      const animationMap = {
+        "Tim": { icon: "fa-heart", class: "icon-heart" },
+        "Mặc cỡ": { icon: "fa-laugh-squint", class: "icon-laugh" },
+        "Xe vivu": { icon: "fa-car", class: "icon-car" },
+        "Đồng hồ": { icon: "fa-clock", class: "icon-clock" },
+        "máy ảnh": { icon: "fa-camera", class: "icon-camera" },
+        "Mặt cười": { icon: "fa-smile-beam", class: "icon-smile" },
+        "Ăn uống": { icon: "fa-utensils", class: "icon-food" },
+        "Locket": { icon: "fa-mobile-alt", class: "icon-locket" },
+        "18+": { icon: "fa-heart-circle", class: "icon-18plus" },
+        "Bệnh viện": { icon: "fa-hospital", class: "icon-hospital" },
+        "khóc": { icon: "fa-sad-tear", class: "icon-cry" },
+        "hài hước": { icon: "fa-laugh-wink", class: "icon-funny" },
+        "ngủ": { icon: "fa-bed", class: "icon-sleep" },
+        "quà tặng": { icon: "fa-gift", class: "icon-gift" },
+        "cười": { icon: "fa-grin-beam", class: "icon-smile" },
+        "cảnh sát": { icon: "fa-user-shield", class: "icon-police" },
+        "Hoàng hôn": { icon: "fa-sun", class: "icon-sunset" },
+        "Sinh nhật": { icon: "fa-birthday-cake", class: "icon-birthday" },
+        "Tình yêu": { icon: "fa-heart", class: "icon-love" },
+        "cầu vồng": { icon: "fa-rainbow", class: "icon-rainbow" },
+        "Trái tim rực rỡ": { icon: "fa-heart", class: "icon-heart" }
+      };
+
+      // Create all slides
+      function createSlides() {
+        slidesData.forEach((slide, index) => {
+          let slideElement;
+
+          if (index === 0) {
+            // First slide is intro
+            slideElement = document.createElement('div');
+            slideElement.className = 'slide intro-slide';
+            slideElement.innerHTML = `
+              <h1>Kỷ niệm của chúng mình</h1>
+              <p>${slide.noi_dung}</p>
+              <button class="btn-next">Bắt đầu <i class="fas fa-arrow-right"></i></button>
+            `;
+          } else {
+            // Regular slides with images
+            slideElement = document.createElement('div');
+            slideElement.className = 'slide';
+
+            // Check if there's a date in the content
+            const dateMatch = slide.noi_dung.match(/\((\d{2}\/\d{2}\/\d{4})\)/);
+            const hasDate = dateMatch !== null;
+            const content = hasDate ? slide.noi_dung.replace(/\(\d{2}\/\d{2}\/\d{4}\)\s*/, '') : slide.noi_dung;
+            
+            let slideHTML = '';
+            
+            // Add date if available
+            if (hasDate) {
+              slideHTML += `<div class="date">${dateMatch[1]}</div>`;
+            }
+
+            // Add image
+            slideHTML += `
+              <div class="image-container">
+                <img src="img/${slide.ten_hinh}.jpg" alt="${content}" />
+              </div>
+              <div class="content">
+                <p>${content}</p>
+              </div>
+              <button class="btn-next">Tiếp theo <i class="fas fa-arrow-right"></i></button>
+            `;
+
+            // Add animation icon if available
+            if (slide.hieu_ung && animationMap[slide.hieu_ung]) {
+              const animation = animationMap[slide.hieu_ung];
+              slideHTML += `<div class="icon-animation ${animation.class}"><i class="fas ${animation.icon}"></i></div>`;
+            }
+
+            slideElement.innerHTML = slideHTML;
+          }
+
+          container.appendChild(slideElement);
+        });
+
+        // Activate the first slide
+        document.querySelector('.slide').classList.add('active');
+        updateProgressBar();
+      }
+
+      // Add event listeners for slide navigation
+      function setupEventListeners() {
+        container.addEventListener('click', function(e) {
+          if (e.target.classList.contains('btn-next') || e.target.parentElement.classList.contains('btn-next')) {
+            nextSlide();
+          }
+        });
+
+        // Setup music control
+        btnMusic.addEventListener('click', function() {
+          if (bgMusic.paused) {
+            bgMusic.play();
+            btnMusic.innerHTML = '<i class="fas fa-pause"></i>';
+          } else {
+            bgMusic.pause();
+            btnMusic.innerHTML = '<i class="fas fa-play"></i>';
+          }
+        });
+
+        // Try to autoplay music
+        const playPromise = bgMusic.play();
+        
+        if (playPromise !== undefined) {
+          playPromise.then(_ => {
+            // Autoplay started!
+          }).catch(error => {
+            // Autoplay prevented
+            btnMusic.classList.add('visible');
+          });
+        }
+      }
+
+      function nextSlide() {
+        const slides = document.querySelectorAll('.slide');
+        
+        if (currentIndex < slides.length - 1) {
+          slides[currentIndex].classList.remove('active');
+          currentIndex++;
+          slides[currentIndex].classList.add('active');
+          updateProgressBar();
+        } else {
+          // Loop back to first slide
+          slides[currentIndex].classList.remove('active');
+          currentIndex = 0;
+          slides[currentIndex].classList.add('active');
+          updateProgressBar();
+        }
+      }
+
+      function updateProgressBar() {
+        const progressPercentage = (currentIndex / (totalSlides - 1)) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+      }
+
+      // Initialize the slideshow
+      createSlides();
+      setupEventListeners();
+
+      // Add keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          nextSlide();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
