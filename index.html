@@ -520,13 +520,147 @@
       transition: width 0.3s ease-in-out;
     }
 
+    /* Ending slide styles */
+    .ending-slide {
+      text-align: center;
+      background-color: transparent;
+      color: var(--text-color);
+      padding: 2rem;
+      max-width: 90%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ending-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .ending-icon {
+      position: absolute;
+      color: rgba(255, 107, 129, 0.3);
+      font-size: 2rem;
+      animation: floatAndPulse 8s ease-in-out infinite;
+    }
+
+    .infinity-icon {
+      color: rgba(77, 182, 172, 0.3);
+      font-size: 1.8rem;
+      animation: floatAndRotate 10s ease-in-out infinite;
+    }
+
+    .ending-title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      animation: pulseText 2s infinite;
+      z-index: 2;
+    }
+
+    .ending-content {
+      font-size: 1.5rem;
+      line-height: 1.6;
+      max-width: 80%;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      margin-top: 2rem;
+      animation: fadeInUp 1s;
+      z-index: 2;
+    }
+
+    .center-heart {
+      font-size: 5rem;
+      color: var(--primary-color);
+      margin: 1.5rem 0;
+      animation: heartbeat 1.5s infinite;
+      z-index: 2;
+    }
+
+    .btn-restart {
+      background-color: #ff4d67;
+      margin-top: 2rem;
+    }
+
+    @keyframes heartbeat {
+      0% {
+        transform: scale(1);
+      }
+      14% {
+        transform: scale(1.3);
+      }
+      28% {
+        transform: scale(1);
+      }
+      42% {
+        transform: scale(1.3);
+      }
+      70% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulseText {
+      0% {
+        text-shadow: 0 0 5px rgba(255, 107, 129, 0.5);
+      }
+      50% {
+        text-shadow: 0 0 20px rgba(255, 107, 129, 0.8);
+      }
+      100% {
+        text-shadow: 0 0 5px rgba(255, 107, 129, 0.5);
+      }
+    }
+
+    @keyframes floatAndPulse {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translate(var(--float-x, 20px), var(--float-y, 20px)) scale(1.2);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+      }
+    }
+
+    @keyframes floatAndRotate {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translate(var(--float-x, 30px), var(--float-y, 30px)) rotate(180deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+        opacity: 0.3;
+      }
+    }
+
     /* Responsive Styles */
     @media (max-width: 768px) {
-      .intro-slide h1 {
+      .intro-slide h1, .ending-title {
         font-size: 2.2rem;
       }
 
-      .intro-slide p {
+      .intro-slide p, .ending-content {
         font-size: 1.2rem;
         max-width: 95%;
       }
@@ -553,16 +687,29 @@
         width: 80%;
         bottom: 15px;
       }
+      
+      .center-heart {
+        font-size: 4rem;
+        margin: 1rem 0;
+      }
+      
+      .ending-icon {
+        font-size: 1.5rem;
+      }
     }
 
     @media (max-width: 480px) {
-      .intro-slide h1 {
+      .intro-slide h1, .ending-title {
         font-size: 1.8rem;
       }
 
-      .intro-slide p {
+      .intro-slide p, .ending-content {
         font-size: 1rem;
         margin-bottom: 1.5rem;
+      }
+      
+      .ending-content {
+        padding: 1rem;
       }
 
       .image-container {
@@ -583,6 +730,11 @@
         width: 40px;
         height: 40px;
         font-size: 1rem;
+      }
+      
+      .center-heart {
+        font-size: 3rem;
+        margin: 0.8rem 0;
       }
     }
   </style>
@@ -719,12 +871,6 @@
           "hieu_ung": "cảnh sát"
         },
         {
-          "trang": 19,
-          "ten_hinh": "h18",
-          "noi_dung": "Dâu sai khi chơi anh Thơm 5 hiệp",
-          "hieu_ung": "18+"
-        },
-        {
           "trang": 20,
           "ten_hinh": "h19",
           "noi_dung": "Dâu với anh ngắm hoàng hôn nè",
@@ -765,6 +911,12 @@
           "ten_hinh": "h25",
           "noi_dung": "Hy vọng chúng ta sẽ mãi hạnh phúc như vậy nhaaaaa",
           "hieu_ung": "Trái tim rực rỡ"
+        },
+        {
+          "trang": 27,
+          "ten_hinh": "",
+          "noi_dung": "1 năm tình yêu tuyệt vời cùng nhau, và mong sẽ còn nhiều năm hạnh phúc tiếp theo. Anh yêu em nhiều lắm, bé Dâu của anh ❤️",
+          "hieu_ung": "Tình yêu vĩnh cửu"
         }
       ];
 
@@ -827,7 +979,8 @@
         "Sinh nhật": { icon: "fa-birthday-cake", class: "icon-birthday" },
         "Tình yêu": { icon: "fa-heart", class: "icon-love" },
         "cầu vồng": { icon: "fa-rainbow", class: "icon-rainbow" },
-        "Trái tim rực rỡ": { icon: "fa-heart", class: "icon-heart" }
+        "Trái tim rực rỡ": { icon: "fa-heart", class: "icon-heart" },
+        "Tình yêu vĩnh cửu": { icon: "fa-infinity", class: "icon-forever-love" }
       };
 
       // Create all slides
@@ -890,6 +1043,80 @@
             slideElement.appendChild(title);
             slideElement.appendChild(content);
             slideElement.appendChild(btnNext);
+          } else if (index === slidesData.length - 1) {
+            // Last slide is ending
+            slideElement = document.createElement('div');
+            slideElement.className = 'slide ending-slide';
+            
+            // Tạo background đặc biệt cho trang ending
+            const endingBackground = document.createElement('div');
+            endingBackground.className = 'ending-background';
+            
+            // Tạo hiệu ứng tim và infinity
+            for (let i = 0; i < 15; i++) {
+              // Thêm trái tim
+              const heart = document.createElement('div');
+              heart.className = 'ending-icon';
+              heart.innerHTML = '<i class="fas fa-heart"></i>';
+              
+              // Random vị trí và thời gian
+              const posX = Math.random() * 100;
+              const posY = Math.random() * 100;
+              const scale = 0.5 + Math.random() * 1.5;
+              const delay = Math.random() * 5;
+              
+              heart.style.left = `${posX}%`;
+              heart.style.top = `${posY}%`;
+              heart.style.transform = `scale(${scale})`;
+              heart.style.animationDelay = `${delay}s`;
+              
+              endingBackground.appendChild(heart);
+              
+              // Thêm biểu tượng vô cực
+              if (i % 3 === 0) {
+                const infinity = document.createElement('div');
+                infinity.className = 'ending-icon infinity-icon';
+                infinity.innerHTML = '<i class="fas fa-infinity"></i>';
+                
+                const infX = Math.random() * 100;
+                const infY = Math.random() * 100;
+                const infScale = 0.5 + Math.random() * 1;
+                const infDelay = Math.random() * 5;
+                
+                infinity.style.left = `${infX}%`;
+                infinity.style.top = `${infY}%`;
+                infinity.style.transform = `scale(${infScale})`;
+                infinity.style.animationDelay = `${infDelay}s`;
+                
+                endingBackground.appendChild(infinity);
+              }
+            }
+            
+            // Tạo các phần tử con
+            const title = document.createElement('h1');
+            title.textContent = 'Tình yêu của chúng mình';
+            title.className = 'ending-title';
+            
+            const content = document.createElement('p');
+            content.textContent = slide.noi_dung;
+            content.className = 'ending-content';
+            
+            // Thêm hình trái tim lớn ở giữa
+            const centerHeart = document.createElement('div');
+            centerHeart.className = 'center-heart';
+            centerHeart.innerHTML = '<i class="fas fa-heart"></i>';
+            
+            // Thêm nút quay lại
+            const btnRestart = document.createElement('button');
+            btnRestart.className = 'btn-next btn-restart';
+            btnRestart.innerHTML = 'Xem lại <i class="fas fa-redo"></i>';
+            
+            // Thêm các phần tử vào slide
+            slideElement.appendChild(endingBackground);
+            slideElement.appendChild(title);
+            slideElement.appendChild(centerHeart);
+            slideElement.appendChild(content);
+            slideElement.appendChild(btnRestart);
           } else {
             // Regular slides with images
             slideElement = document.createElement('div');
@@ -917,11 +1144,16 @@
             }
 
             // Add image with correct extension
-            const imgExtension = getImageExtension(slide.ten_hinh);
+            if (slide.ten_hinh) {
+              const imgExtension = getImageExtension(slide.ten_hinh);
+              slideHTML += `
+                <div class="image-container">
+                  <img src="img/${slide.ten_hinh}.${imgExtension}" alt="${content}" />
+                </div>
+              `;
+            }
+            
             slideHTML += `
-              <div class="image-container">
-                <img src="img/${slide.ten_hinh}.${imgExtension}" alt="${content}" />
-              </div>
               <div class="content">
                 <p>${content}</p>
               </div>
@@ -989,7 +1221,17 @@
       function setupEventListeners() {
         container.addEventListener('click', function(e) {
           if (e.target.classList.contains('btn-next') || e.target.parentElement.classList.contains('btn-next')) {
-            nextSlide();
+            // Kiểm tra nếu là nút restart
+            if (e.target.classList.contains('btn-restart') || e.target.parentElement.classList.contains('btn-restart')) {
+              // Reset về slide đầu tiên
+              const slides = document.querySelectorAll('.slide');
+              slides[currentIndex].classList.remove('active');
+              currentIndex = 0;
+              slides[currentIndex].classList.add('active');
+              updateProgressBar();
+            } else {
+              nextSlide();
+            }
           }
         });
 
@@ -1029,6 +1271,11 @@
           if (currentIndex > 0 && slidesData[currentIndex].hieu_ung) {
             createFloatingIcons(currentIndex);
           }
+          
+          // Thêm hiệu ứng đặc biệt cho slide cuối cùng
+          if (currentIndex === slides.length - 1) {
+            setupEndingSlide();
+          }
         } else {
           // Loop back to first slide
           slides[currentIndex].classList.remove('active');
@@ -1041,6 +1288,20 @@
             createFloatingIcons(currentIndex);
           }
         }
+      }
+      
+      // Thiết lập hiệu ứng đặc biệt cho slide cuối
+      function setupEndingSlide() {
+        const endingIcons = document.querySelectorAll('.ending-icon');
+        
+        // Thiết lập hướng di chuyển ngẫu nhiên cho mỗi icon
+        endingIcons.forEach(icon => {
+          const moveX = (Math.random() * 100) - 50; // -50 đến 50px
+          const moveY = (Math.random() * 100) - 50; // -50 đến 50px
+          
+          icon.style.setProperty('--float-x', `${moveX}px`);
+          icon.style.setProperty('--float-y', `${moveY}px`);
+        });
       }
 
       function updateProgressBar() {
