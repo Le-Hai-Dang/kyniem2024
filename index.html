@@ -101,18 +101,20 @@
     .image-container {
       width: 100%;
       max-width: 500px;
-      max-height: 60vh;
       margin: 15px 0;
       position: relative;
       overflow: hidden;
       border-radius: 10px;
       box-shadow: var(--shadow);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .image-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      max-width: 100%;
+      max-height: 60vh;
+      object-fit: contain;
       display: block;
     }
 
@@ -146,6 +148,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
     }
 
     .btn-next:hover {
@@ -395,6 +402,42 @@
       border-radius: 3px;
       transition: width 0.3s ease-in-out;
     }
+
+    /* Floating icons animation */
+    .floating-icons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .floating-icon {
+      position: absolute;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      opacity: 0;
+      animation: floatAcross 8s linear infinite;
+    }
+
+    @keyframes floatAcross {
+      0% {
+        transform: translate(-100px, 0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate(calc(100vw + 100px), 0);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -412,8 +455,8 @@
     </button>
   </div>
 
-  <audio id="bgMusic" loop>
-    <source src="background-music.mp3" type="audio/mp3">
+  <audio id="bgMusic" loop autoplay preload="auto">
+    <source src="bacground-music.mp3" type="audio/mp3">
   </audio>
 
   <script>
@@ -585,6 +628,36 @@
       let currentIndex = 0;
       let totalSlides = slidesData.length;
 
+      // Đảm bảo nhạc phát được
+      function setupAudio() {
+        // Hiện nút điều khiển nhạc
+        btnMusic.classList.add('visible');
+        
+        // Thêm sự kiện click để phát nhạc
+        document.addEventListener('click', function audioSetup() {
+          bgMusic.play().then(() => {
+            btnMusic.innerHTML = '<i class="fas fa-pause"></i>';
+          }).catch(err => {
+            console.log('Không thể tự động phát nhạc:', err);
+          });
+          
+          // Chỉ thực hiện một lần
+          document.removeEventListener('click', audioSetup);
+        }, { once: true });
+        
+        // Xử lý khi người dùng tương tác với trang
+        document.addEventListener('keydown', function audioSetupKey() {
+          bgMusic.play().then(() => {
+            btnMusic.innerHTML = '<i class="fas fa-pause"></i>';
+          }).catch(err => {
+            console.log('Không thể tự động phát nhạc:', err);
+          });
+          
+          // Chỉ thực hiện một lần
+          document.removeEventListener('keydown', audioSetupKey);
+        }, { once: true });
+      }
+
       // Map animation types to Font Awesome icons and classes
       const animationMap = {
         "Tim": { icon: "fa-heart", class: "icon-heart" },
@@ -641,10 +714,20 @@
               slideHTML += `<div class="date">${dateMatch[1]}</div>`;
             }
 
-            // Add image
+            // Function to get correct image extension
+            function getImageExtension(imageNumber) {
+              // Xử lý các trường hợp đặc biệt
+              if (imageNumber === 'h18') return 'HEIC';
+              if (imageNumber === 'h22') return 'PNG';
+              if (imageNumber === 'h25') return 'JPG';
+              return 'jpg';
+            }
+
+            // Add image with correct extension
+            const imgExtension = getImageExtension(slide.ten_hinh);
             slideHTML += `
               <div class="image-container">
-                <img src="img/${slide.ten_hinh}.jpg" alt="${content}" />
+                <img src="img/${slide.ten_hinh}.${imgExtension}" alt="${content}" />
               </div>
               <div class="content">
                 <p>${content}</p>
@@ -656,6 +739,9 @@
             if (slide.hieu_ung && animationMap[slide.hieu_ung]) {
               const animation = animationMap[slide.hieu_ung];
               slideHTML += `<div class="icon-animation ${animation.class}"><i class="fas ${animation.icon}"></i></div>`;
+              
+              // Add floating icons container
+              slideHTML += `<div class="floating-icons" id="floatingIcons-${index}"></div>`;
             }
 
             slideElement.innerHTML = slideHTML;
@@ -667,6 +753,43 @@
         // Activate the first slide
         document.querySelector('.slide').classList.add('active');
         updateProgressBar();
+        
+        // Initialize floating icons for the first active slide
+        if (currentIndex > 0 && slidesData[currentIndex].hieu_ung) {
+          createFloatingIcons(currentIndex);
+        }
+      }
+
+      // Create floating icons for the current slide
+      function createFloatingIcons(slideIndex) {
+        const currentSlide = slidesData[slideIndex];
+        if (!currentSlide || !currentSlide.hieu_ung || !animationMap[currentSlide.hieu_ung]) {
+          return;
+        }
+        
+        const animation = animationMap[currentSlide.hieu_ung];
+        const floatingContainer = document.getElementById(`floatingIcons-${slideIndex}`);
+        
+        if (!floatingContainer) return;
+        
+        // Clear previous icons
+        floatingContainer.innerHTML = '';
+        
+        // Create 10 floating icons
+        for (let i = 0; i < 10; i++) {
+          const icon = document.createElement('div');
+          icon.className = 'floating-icon';
+          icon.innerHTML = `<i class="fas ${animation.icon}"></i>`;
+          
+          // Randomize position and animation delay
+          const delay = Math.random() * 8; // Random delay between 0-8s
+          const topPos = Math.random() * 100; // Random vertical position
+          
+          icon.style.animationDelay = `${delay}s`;
+          icon.style.top = `${topPos}%`;
+          
+          floatingContainer.appendChild(icon);
+        }
       }
 
       // Add event listeners for slide navigation
@@ -689,16 +812,15 @@
         });
 
         // Try to autoplay music
-        const playPromise = bgMusic.play();
-        
-        if (playPromise !== undefined) {
-          playPromise.then(_ => {
-            // Autoplay started!
-          }).catch(error => {
-            // Autoplay prevented
-            btnMusic.classList.add('visible');
-          });
-        }
+        bgMusic.play().then(_ => {
+          // Autoplay started!
+          btnMusic.innerHTML = '<i class="fas fa-pause"></i>';
+        }).catch(error => {
+          // Autoplay prevented
+          console.log('Autoplay prevented, waiting for user interaction');
+          btnMusic.classList.add('visible');
+          setupAudio();
+        });
       }
 
       function nextSlide() {
@@ -709,12 +831,22 @@
           currentIndex++;
           slides[currentIndex].classList.add('active');
           updateProgressBar();
+          
+          // Create floating icons for the new slide
+          if (currentIndex > 0 && slidesData[currentIndex].hieu_ung) {
+            createFloatingIcons(currentIndex);
+          }
         } else {
           // Loop back to first slide
           slides[currentIndex].classList.remove('active');
           currentIndex = 0;
           slides[currentIndex].classList.add('active');
           updateProgressBar();
+          
+          // Create floating icons for the first slide
+          if (slidesData[currentIndex].hieu_ung) {
+            createFloatingIcons(currentIndex);
+          }
         }
       }
 
