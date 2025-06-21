@@ -67,24 +67,32 @@
 
     .intro-slide {
       text-align: center;
-      background-color: var(--secondary-color);
+      background-color: transparent;
       color: var(--text-color);
       padding: 2rem;
       border-radius: 10px;
-      box-shadow: var(--shadow);
       max-width: 90%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
 
     .intro-slide h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-bottom: 1.5rem;
       color: var(--primary-color);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      animation: fadeInDown 1s ease-out;
     }
 
     .intro-slide p {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       margin-bottom: 2rem;
       line-height: 1.6;
+      animation: fadeIn 1.5s ease-out;
+      max-width: 80%;
     }
 
     .date {
@@ -96,6 +104,7 @@
       margin-bottom: 15px;
       box-shadow: var(--shadow);
       display: inline-block;
+      animation: bounceIn 0.8s;
     }
 
     .image-container {
@@ -109,6 +118,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      animation: fadeIn 1s ease-out;
     }
 
     .image-container img {
@@ -126,6 +136,7 @@
       box-shadow: var(--shadow);
       max-width: 90%;
       text-align: center;
+      animation: fadeInUp 0.8s ease-out;
     }
 
     .content p {
@@ -153,16 +164,87 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 50;
+      animation: pulse 2s infinite;
     }
 
     .btn-next:hover {
       background-color: #ff4d67;
-      transform: translateY(-2px);
+      transform: translateX(-50%) translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     .btn-next i {
       font-size: 0.9rem;
+      animation: bounceLeft 1.5s infinite;
+    }
+
+    @keyframes bounceLeft {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 129, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(255, 107, 129, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 129, 0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+      }
     }
 
     .icon-animation {
@@ -195,6 +277,7 @@
       transition: all 0.3s;
       opacity: 0;
       pointer-events: none;
+      animation: fadeIn 1s forwards;
     }
 
     .btn-music.visible {
@@ -205,6 +288,77 @@
     .btn-music:hover {
       background-color: #ff4d67;
       transform: scale(1.1);
+    }
+
+    /* Floating icons animation */
+    .floating-icons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .floating-icon {
+      position: absolute;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      opacity: 0;
+      animation: floatAcross 8s linear infinite;
+    }
+
+    @keyframes floatAcross {
+      0% {
+        transform: translate(-100px, 0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translate(calc(100vw + 100px), 0);
+        opacity: 0;
+      }
+    }
+
+    /* Intro page background animation */
+    .intro-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-bg {
+      position: absolute;
+      color: rgba(255, 107, 129, 0.2);
+      font-size: 3rem;
+      animation: floatHeart 15s linear infinite;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.3;
+      }
+      90% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translate(var(--move-x), var(--move-y)) rotate(var(--rotate));
+        opacity: 0;
+      }
     }
 
     /* Animation Positions */
@@ -345,14 +499,36 @@
       }
     }
 
+    /* Progress bar */
+    .progress-container {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 6px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 3px;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 3px;
+      transition: width 0.3s ease-in-out;
+    }
+
     /* Responsive Styles */
     @media (max-width: 768px) {
       .intro-slide h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
       }
 
       .intro-slide p {
-        font-size: 1rem;
+        font-size: 1.2rem;
+        max-width: 95%;
       }
 
       .date {
@@ -366,10 +542,16 @@
       .btn-next {
         font-size: 1rem;
         padding: 10px 20px;
+        bottom: 50px;
       }
 
       .icon-animation {
         font-size: 2.5rem;
+      }
+      
+      .progress-container {
+        width: 80%;
+        bottom: 15px;
       }
     }
 
@@ -378,64 +560,29 @@
         font-size: 1.8rem;
       }
 
+      .intro-slide p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
       .image-container {
-        max-height: 50vh;
+        max-width: 90%;
       }
-    }
-
-    /* Progress bar */
-    .progress-container {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
-      height: 6px;
-      background-color: rgba(255, 255, 255, 0.5);
-      border-radius: 3px;
-      z-index: 100;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background-color: var(--primary-color);
-      border-radius: 3px;
-      transition: width 0.3s ease-in-out;
-    }
-
-    /* Floating icons animation */
-    .floating-icons {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .floating-icon {
-      position: absolute;
-      font-size: 1.5rem;
-      color: var(--primary-color);
-      opacity: 0;
-      animation: floatAcross 8s linear infinite;
-    }
-
-    @keyframes floatAcross {
-      0% {
-        transform: translate(-100px, 0);
-        opacity: 0;
+      
+      .content {
+        padding: 10px 15px;
       }
-      10% {
-        opacity: 0.7;
+      
+      .btn-next {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        bottom: 45px;
       }
-      90% {
-        opacity: 0.7;
-      }
-      100% {
-        transform: translate(calc(100vw + 100px), 0);
-        opacity: 0;
+      
+      .btn-music {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
       }
     }
   </style>
@@ -692,11 +839,57 @@
             // First slide is intro
             slideElement = document.createElement('div');
             slideElement.className = 'slide intro-slide';
-            slideElement.innerHTML = `
-              <h1>Kỷ niệm của chúng mình</h1>
-              <p>${slide.noi_dung}</p>
-              <button class="btn-next">Bắt đầu <i class="fas fa-arrow-right"></i></button>
-            `;
+            
+            // Thêm background trái tim cho trang đầu
+            const introBackground = document.createElement('div');
+            introBackground.className = 'intro-background';
+            
+            // Tạo 20 trái tim nền
+            for (let i = 0; i < 20; i++) {
+              const heart = document.createElement('div');
+              heart.className = 'heart-bg';
+              heart.innerHTML = '<i class="fas fa-heart"></i>';
+              
+              // Random vị trí bắt đầu
+              const startX = Math.random() * 100;
+              const startY = Math.random() * 100;
+              
+              // Random khoảng cách di chuyển
+              const moveX = (Math.random() * 200) - 100; // -100 đến 100
+              const moveY = (Math.random() * 200) - 100; // -100 đến 100
+              const rotate = Math.random() * 360;
+              
+              // Random thời gian và độ trễ
+              const duration = 10 + Math.random() * 20;
+              const delay = Math.random() * 10;
+              
+              heart.style.left = `${startX}%`;
+              heart.style.top = `${startY}%`;
+              heart.style.setProperty('--move-x', `${moveX}px`);
+              heart.style.setProperty('--move-y', `${moveY}px`);
+              heart.style.setProperty('--rotate', `${rotate}deg`);
+              heart.style.animationDuration = `${duration}s`;
+              heart.style.animationDelay = `${delay}s`;
+              
+              introBackground.appendChild(heart);
+            }
+            
+            // Tạo các phần tử con
+            const title = document.createElement('h1');
+            title.textContent = 'Kỷ niệm của chúng mình';
+            
+            const content = document.createElement('p');
+            content.textContent = slide.noi_dung;
+            
+            const btnNext = document.createElement('button');
+            btnNext.className = 'btn-next';
+            btnNext.innerHTML = 'Bắt đầu <i class="fas fa-arrow-right"></i>';
+            
+            // Thêm các phần tử vào slide
+            slideElement.appendChild(introBackground);
+            slideElement.appendChild(title);
+            slideElement.appendChild(content);
+            slideElement.appendChild(btnNext);
           } else {
             // Regular slides with images
             slideElement = document.createElement('div');
